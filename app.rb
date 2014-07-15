@@ -20,9 +20,14 @@ class App < Sinatra::Base
   end
 
   post "/registrations" do
+    values = if params[:name_is_hunter]
+               true
+             else
+               false
+             end
     insert_sql = <<-SQL
       INSERT INTO users (username, email, password, name_is_hunter)
-      VALUES ('#{params[:username]}', '#{params[:email]}', '#{params[:password]}', '#{params[:name_is_hunter]}')
+      VALUES ('#{params[:username]}', '#{params[:email]}', '#{params[:password]}', #{values})
     SQL
 
     @database_connection.sql(insert_sql)
